@@ -3,97 +3,165 @@
 <?php 
 session_start();
 include('./db_connect.php');
-  ob_start();
-  // if(!isset($_SESSION['system'])){
+ob_start();
+// if(!isset($_SESSION['system'])){
 
-    $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
-    foreach($system as $k => $v){
-      $_SESSION['system'][$k] = $v;
-    }
-  // }
-  ob_end_flush();
+$system = $conn->query("SELECT * FROM system_settings")->fetch_array();
+foreach($system as $k => $v){
+    $_SESSION['system'][$k] = $v;
+}
+// }
+ob_end_flush();
 ?>
 <?php 
 if(isset($_SESSION['login_id']))
 header("location:index.php?page=home");
 
 ?>
-<?php include 'header.php' ?>
-<body class="hold-transition login-page bg-black">
-<div class="login-box">
-  <div class="login-logo">
-    <a href="#" class="text-white"><b><?php echo $_SESSION['system']['name'] ?> - Admin</b></a>
-  </div>
-  <!-- /.login-logo -->
-  <div class="card">
-    <div class="card-body login-card-body">
-      <form action="" id="login-form">
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" name="email" required placeholder="Email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" name="password" required placeholder="Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-          </div>
-          <!-- /.col -->
-        </div>
-      </form>
-    </div>
-    <!-- /.login-card-body -->
-  </div>
-</div>
-<!-- /.login-box -->
-<script>
-  $(document).ready(function(){
-    $('#login-form').submit(function(e){
-    e.preventDefault()
-    start_load()
-    if($(this).find('.alert-danger').length > 0 )
-      $(this).find('.alert-danger').remove();
-    $.ajax({
-      url:'ajax.php?action=login',
-      method:'POST',
-      data:$(this).serialize(),
-      error:err=>{
-        console.log(err)
-        end_load();
-
-      },
-      success:function(resp){
-        if(resp == 1){
-          location.href ='index.php?page=home';
-        }else{
-          $('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>')
-          end_load();
+<?php
+// Do not include header.php here to avoid external CSS interference
+?>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
-      }
-    })
-  })
-  })
-</script>
-<?php include 'footer.php' ?>
 
+        body.unique-login-background {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #121212;
+            background-image: url('./neon.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .unique-background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: blur(0px);
+            z-index: -1;
+            background-image: inherit;
+        }
+
+        .unique-login-container {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px) !important;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: left; 
+            max-width: 350px; /* Adjust the width here */
+            width: 100%;
+            color: #fff;
+        }
+
+        h2.unique-title {
+            margin-bottom: 20px;
+        }
+
+        .unique-form-group {
+            margin-bottom: 15px;
+        }
+
+        label.unique-label {
+            display: block;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        input.unique-input[type="email"],
+        input.unique-input[type="password"] {
+            width: calc(100% - 0px);
+            padding: 10px;
+            box-sizing: border-box;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.3) !important;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            color: #fff !important; /* Text color in input fields */
+        }
+
+        button.unique-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button.unique-button:hover {
+            background-color: #0056b3;
+        }
+
+        .unique-alert {
+            color: #ff0000;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.25rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body class="unique-login-background">
+    <div class="unique-background-image"></div>
+    <div class="unique-login-container">
+        <h2 class="unique-title">Login With Your Email-ID</h2>
+        <form id="login-form">
+            <div class="unique-form-group">
+                <label for="email" class="unique-label">Email</label>
+                <input type="email" id="email" name="email" required class="unique-input">
+            </div>
+            <div class="unique-form-group">
+                <label for="password" class="unique-label">Password</label>
+                <input type="password" id="password" name="password" required class="unique-input">
+            </div>
+            <button type="submit" class="unique-button">Sign In</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $('#login-form').submit(function(e){
+                e.preventDefault();
+                start_load();
+                if($(this).find('.unique-alert').length > 0 )
+                    $(this).find('.unique-alert').remove();
+                $.ajax({
+                    url:'ajax.php?action=login',
+                    method:'POST',
+                    data:$(this).serialize(),
+                    error:err=>{
+                        console.log(err);
+                        end_load();
+                    },
+                    success:function(resp){
+                        if(resp == 1){
+                            location.href ='index.php?page=home';
+                        }else{
+                            $('#login-form').prepend('<div class="unique-alert">Username or password is incorrect.</div>');
+                            end_load();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <?php
+    // Do not include footer.php here to avoid external CSS interference
+    ?>
 </body>
 </html>

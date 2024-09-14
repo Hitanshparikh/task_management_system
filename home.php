@@ -144,7 +144,7 @@ if($_SESSION['login_type'] == 2){
                     $tasks_due_query = $conn->query("SELECT * FROM task_list WHERE assigned_to = {$user['id']} AND due_date < CURDATE()");
                     $tasks_due = $tasks_due_query ? $tasks_due_query->num_rows : 0;
             ?>
-                <div class="card">
+                <div class="card user-card">
                     <div class="avatar">
                         <img src="<?php echo $avatar ? 'assets/uploads/' . $avatar : 'assets/uploads/default.png'; ?>" alt="<?php echo $full_name; ?>">
                     </div>
@@ -194,32 +194,32 @@ if($_SESSION['login_type'] == 2){
     .dashboard {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
+        gap: 15px;
         padding: 20px;
     }
-    
-    .card {
+
+    .user-card {
         background-color: #fff;
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin: 15px;
         padding: 20px;
-        width: calc(33.333% - 40px); /* 3 cards per row with margin */
+        width: calc(100% / 2 - 30px); /* Adjusted for 2 cards per row with gap */
         box-sizing: border-box;
         transition: transform 0.3s;
+        overflow: hidden; /* Prevents content from overflowing */
     }
-    
-    .card:hover {
+
+    .user-card:hover {
         transform: scale(1.05);
     }
-    
+
     .avatar img {
         border-radius: 50%;
         width: 80px;
         height: 80px;
         object-fit: cover;
     }
-    
+
     .details {
         margin-top: 10px;
     }
