@@ -1,26 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<?php 
-session_start();
-include('./db_connect.php');
-ob_start();
-// if(!isset($_SESSION['system'])){
-
-$system = $conn->query("SELECT * FROM system_settings")->fetch_array();
-foreach($system as $k => $v){
-    $_SESSION['system'][$k] = $v;
-}
-// }
-ob_end_flush();
-?>
-<?php 
-if(isset($_SESSION['login_id']))
-header("location:index.php?page=home");
-
-?>
-<?php
-// Do not include header.php here to avoid external CSS interference
-?>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,7 +39,7 @@ header("location:index.php?page=home");
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             text-align: left; 
-            max-width: 350px; /* Adjust the width here */
+            max-width: 400px; /* Adjust the width here */
             width: 100%;
             color: #fff;
         }
@@ -119,7 +98,19 @@ header("location:index.php?page=home");
 <body class="unique-login-background">
     <div class="unique-background-image"></div>
     <div class="unique-login-container">
-        <h2 class="unique-title">Login With Your Email-ID</h2>
+        <h2 class="unique-title">
+            <?php 
+                session_start();
+                include('./db_connect.php');
+
+                // Check if session is initialized
+                if (isset($_SESSION['system']['name'])) {
+                    echo $_SESSION['system']['name'] . ' - Admin';
+                } else {
+                    echo 'Login';
+                }
+            ?>
+        </h2>
         <form id="login-form">
             <div class="unique-form-group">
                 <label for="email" class="unique-label">Email</label>
@@ -133,35 +124,30 @@ header("location:index.php?page=home");
         </form>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function(){
             $('#login-form').submit(function(e){
                 e.preventDefault();
-                start_load();
                 if($(this).find('.unique-alert').length > 0 )
                     $(this).find('.unique-alert').remove();
                 $.ajax({
-                    url:'ajax.php?action=login',
-                    method:'POST',
-                    data:$(this).serialize(),
-                    error:err=>{
+                    url: 'ajax.php?action=login',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    error: function(err) {
                         console.log(err);
-                        end_load();
                     },
-                    success:function(resp){
+                    success: function(resp) {
                         if(resp == 1){
-                            location.href ='index.php?page=home';
-                        }else{
+                            location.href = 'index.php?page=home';
+                        } else {
                             $('#login-form').prepend('<div class="unique-alert">Username or password is incorrect.</div>');
-                            end_load();
                         }
                     }
                 });
             });
         });
     </script>
-    <?php
-    // Do not include footer.php here to avoid external CSS interference
-    ?>
 </body>
 </html>
