@@ -93,6 +93,7 @@
             border-radius: 0.25rem;
             margin-top: 10px;
         }
+        
     </style>
 </head>
 <body class="unique-login-background">
@@ -112,16 +113,20 @@
             ?>
         </h2>
         <form id="login-form">
-            <div class="unique-form-group">
-                <label for="email" class="unique-label">Email</label>
-                <input type="email" id="email" name="email" required class="unique-input">
-            </div>
-            <div class="unique-form-group">
-                <label for="password" class="unique-label">Password</label>
-                <input type="password" id="password" name="password" required class="unique-input">
-            </div>
-            <button type="submit" class="unique-button">Sign In</button>
-        </form>
+    <div class="unique-form-group">
+        <label for="email" class="unique-label">Email</label>
+        <input type="email" id="email" name="email" required class="unique-input">
+    </div>
+    <div class="unique-form-group">
+        <label for="password" class="unique-label">Password</label>
+        <input type="password" id="password" name="password" required class="unique-input">
+    </div>
+    <div class="unique-form-group">
+        <input type="checkbox" id="remember" name="remember" class="unique-checkbox">
+        <label for="remember" class="unique-label-remember">Remember Me</label>
+    </div>
+    <button type="submit" class="unique-button">Sign In</button>
+</form>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
