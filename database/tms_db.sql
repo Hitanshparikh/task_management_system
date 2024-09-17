@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2020 at 08:37 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.2.33
+-- Generation Time: Sep 17, 2024 at 08:24 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -37,15 +37,20 @@ CREATE TABLE `project_list` (
   `manager_id` int(30) NOT NULL,
   `user_ids` text NOT NULL,
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `project_list`
 --
 
 INSERT INTO `project_list` (`id`, `name`, `description`, `status`, `start_date`, `end_date`, `manager_id`, `user_ids`, `date_created`) VALUES
-(1, 'Sample Project', '								&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Open Sans&amp;quot;, Arial, sans-serif; font-size: 14px; text-align: justify;&quot;&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. In elementum, metus vitae malesuada mollis, urna nisi luctus ligula, vitae volutpat massa eros eu ligula. Nunc dui metus, iaculis id dolor non, luctus tristique libero. Aenean et sagittis sem. Nulla facilisi. Mauris at placerat augue. Nullam porttitor felis turpis, ac varius eros placerat et. Nunc ut enim scelerisque, porta lacus vitae, viverra justo. Nam mollis turpis nec dolor feugiat, sed bibendum velit placerat. Etiam in hendrerit leo. Nullam mollis lorem massa, sit amet tincidunt dolor lacinia at.&lt;/span&gt;							', 0, '2020-11-03', '2021-01-20', 2, '3,4,5', '2020-12-03 09:56:56'),
-(2, 'Sample Project 102', 'Sample Only', 0, '2020-12-02', '2020-12-31', 2, '3', '2020-12-03 13:51:54');
+(3, 'Vaibhavi Patel', 'All the Tasks for Vaibhavi Patel are here', 0, '2024-01-01', '2025-12-01', 13, '6', '2024-09-17 09:27:35'),
+(4, 'Shrusti gajjar', '						All the tasks for Shrusti Gajjar are here.					', 0, '2024-01-01', '2025-12-01', 13, '7', '2024-09-17 09:32:21'),
+(5, 'Abhishek Patel', '						All the tasks for Abhishek Patel are here.					', 0, '2024-01-01', '2025-12-01', 13, '9', '2024-09-17 09:33:57'),
+(6, 'Pinal Hansora', '						All the tasks for Pinal Hansora are here.					', 0, '2024-01-01', '2025-12-01', 13, '10', '2024-09-17 09:38:44'),
+(7, 'Avani Khokharia', 'All the tasks for Avani Khokharia are here.', 0, '2024-01-01', '2025-12-01', 13, '8', '2024-09-17 09:39:50'),
+(8, 'Jigar Sarda', 'All the tasks for Jigar Sarda are here.', 0, '2024-01-01', '2025-12-01', 13, '12', '2024-09-17 09:40:47'),
+(9, 'Harshul Yagnik', '						All the tasks for Harshul Yagnik are here.					', 0, '2024-01-11', '2025-12-01', 13, '11', '2024-09-17 09:42:43');
 
 -- --------------------------------------------------------
 
@@ -60,14 +65,14 @@ CREATE TABLE `system_settings` (
   `contact` varchar(20) NOT NULL,
   `address` text NOT NULL,
   `cover_img` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `system_settings`
 --
 
 INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cover_img`) VALUES
-(1, 'Task Management System', 'info@sample.comm', '+6948 8542 623', '2102  Caldwell Road, Rochester, New York, 14608', '');
+(1, 'Task Management System', '23cs054@charusat.edu.in', 'none', 'Cspit Charusat', '');
 
 -- --------------------------------------------------------
 
@@ -82,17 +87,18 @@ CREATE TABLE `task_list` (
   `description` text NOT NULL,
   `status` tinyint(4) NOT NULL,
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `task_list`
 --
 
 INSERT INTO `task_list` (`id`, `project_id`, `task`, `description`, `status`, `date_created`) VALUES
-(1, 1, 'Sample Task 1', '								&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Open Sans&amp;quot;, Arial, sans-serif; font-size: 14px; text-align: justify;&quot;&gt;Fusce ullamcorper mattis semper. Nunc vel risus ipsum. Sed maximus dapibus nisl non laoreet. Pellentesque quis mauris odio. Donec fermentum facilisis odio, sit amet aliquet purus scelerisque eget.&amp;nbsp;&lt;/span&gt;													', 3, '2020-12-03 11:08:58'),
-(2, 1, 'Sample Task 2', 'Sample Task 2							', 1, '2020-12-03 13:50:15'),
-(3, 2, 'Task Test', 'Sample', 1, '2020-12-03 13:52:25'),
-(4, 2, 'test 23', 'Sample test 23', 1, '2020-12-03 13:52:40');
+(5, 3, 'submit exam papers', 'submit the checked papers by tomorrow', 1, '2024-09-17 09:28:44'),
+(6, 5, 'test 1', '							', 1, '2024-09-17 09:51:25'),
+(7, 7, 'test 2', '							', 1, '2024-09-17 09:52:56'),
+(8, 9, 'test 3', '							', 1, '2024-09-17 09:53:11'),
+(9, 8, 'test 4', '							', 1, '2024-09-17 09:53:25');
 
 -- --------------------------------------------------------
 
@@ -109,18 +115,25 @@ CREATE TABLE `users` (
   `type` tinyint(1) NOT NULL DEFAULT 2 COMMENT '1 = admin, 2 = staff',
   `avatar` text NOT NULL DEFAULT 'no-image-available.png',
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `type`, `avatar`, `date_created`) VALUES
-(1, 'Administrator', '', 'admin@admin.com', '0192023a7bbd73250516f069df18b500', 1, 'no-image-available.png', '2020-11-26 10:57:04'),
-(2, 'John', 'Smith', 'jsmith@sample.com', '1254737c076cf867dc53d60a0364f38e', 2, '1606978560_avatar.jpg', '2020-12-03 09:26:03'),
-(3, 'Claire', 'Blake', 'cblake@sample.com', '4744ddea876b11dcb1d169fadf494418', 3, '1606958760_47446233-clean-noir-et-gradient-sombre-image-de-fond-abstrait-.jpg', '2020-12-03 09:26:42'),
-(4, 'George', 'Wilson', 'gwilson@sample.com', 'd40242fb23c45206fadee4e2418f274f', 3, '1606963560_avatar.jpg', '2020-12-03 10:46:41'),
-(5, 'Mike', 'Williams', 'mwilliams@sample.com', '3cc93e9a6741d8b40460457139cf8ced', 3, '1606963620_47446233-clean-noir-et-gradient-sombre-image-de-fond-abstrait-.jpg', '2020-12-03 10:47:06');
+(1, 'Amit', 'Thakkar', 'amit@hod', '17d84f171d54c301fabae1391a125c4e', 1, '1726477200_images.jpeg', '2020-11-26 10:57:04'),
+(6, 'Vaibhavi', 'Patel', 'vaibhavipatel@charusat.in', '08f41e2b56730d87f1232d525303ba14', 3, '1726551000_VaibhaviPatel.webp', '2024-09-17 09:17:34'),
+(7, 'Srushti', 'Gajjar', 'srushti@gajjar.charusat.in', '5dae429688af1c521ad87ac394192c6d', 3, '1726551060_SrushtiGajjar.webp', '2024-09-17 09:18:35'),
+(8, 'avani', 'khokharia', 'avani@khokharia.charusat.in', '17540aef7b8470cc3ea8b2b9046af3b6', 3, '1726548120_download (2).jpeg', '2024-09-17 09:19:25'),
+(9, 'Abhishek', 'patel', 'Abhishek@patel.charusat.in', '62c428533830d84fd8bc77bf402512fc', 3, '1726548060_download (1).jpeg', '2024-09-17 09:20:05'),
+(10, 'Pinal', 'Hansora', 'pinal@hansora.charusat.in', 'da984e42a5899bbdac496ef0cbadcee2', 3, '1726550640_1725344474065.jpeg', '2024-09-17 09:21:01'),
+(11, 'harshul', 'yagnik', 'harshul@yagnik.charusat.in', '035ed2311b96d2a65ec6a6fe71046c14', 3, '1726548000_download.jpeg', '2024-09-17 09:21:55'),
+(12, 'Jigar', 'Sarda', 'Jigar@Sarda.charusat.in', '32981a13284db7a021131df49e6cd203', 3, '1726550640_images (1).jpeg', '2024-09-17 09:22:56'),
+(13, 'Task', 'Manager', 'manager@cse', 'd6fd0924e324f50669ae0295adf59567', 2, '1726550700_360_F_227450952_KQCMShHPOPebUXklULsKsROk5AvN6H1H.jpg', '2024-09-17 09:26:28'),
+(14, 'Hemang', 'Thakar', 'hemang@thakar.charusat.in', 'eb5e48e74123cacc52761302ea4a7d22', 3, '1726551000_HemangThakar.webp', '2024-09-17 11:00:36'),
+(15, 'Vidisha', 'Pradhan', 'vidisha@pradhan.charusat.in', '08f41e2b56730d87f1232d525303ba14', 3, '1726551120_VidishaPradhan.webp', '2024-09-17 11:02:32'),
+(16, 'Dhara', 'Solanki', 'dhara@solanki.charusat.in', '522748524ad010358705b6852b81be4c', 3, '1726551180_DharaSolanki.webp', '2024-09-17 11:03:35');
 
 -- --------------------------------------------------------
 
@@ -140,17 +153,7 @@ CREATE TABLE `user_productivity` (
   `user_id` int(30) NOT NULL,
   `time_rendered` float NOT NULL,
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `user_productivity`
---
-
-INSERT INTO `user_productivity` (`id`, `project_id`, `task_id`, `comment`, `subject`, `date`, `start_time`, `end_time`, `user_id`, `time_rendered`, `date_created`) VALUES
-(1, 1, 1, '							&lt;p&gt;Sample Progress&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Test 1&lt;/li&gt;&lt;li&gt;Test 2&lt;/li&gt;&lt;li&gt;Test 3&lt;/li&gt;&lt;/ul&gt;																			', 'Sample Progress', '2020-12-03', '08:00:00', '10:00:00', 1, 2, '2020-12-03 12:13:28'),
-(2, 1, 1, '							Sample Progress						', 'Sample Progress 2', '2020-12-03', '13:00:00', '14:00:00', 1, 1, '2020-12-03 13:48:28'),
-(3, 1, 2, '							Sample						', 'Test', '2020-12-03', '08:00:00', '09:00:00', 5, 1, '2020-12-03 13:57:22'),
-(4, 1, 2, 'asdasdasd', 'Sample Progress', '2020-12-02', '08:00:00', '10:00:00', 2, 2, '2020-12-03 14:36:30');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -194,7 +197,7 @@ ALTER TABLE `user_productivity`
 -- AUTO_INCREMENT for table `project_list`
 --
 ALTER TABLE `project_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -206,13 +209,13 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `task_list`
 --
 ALTER TABLE `task_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `user_productivity`
