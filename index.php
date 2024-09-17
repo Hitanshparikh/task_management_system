@@ -122,7 +122,7 @@
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <strong>Made By 23CS043, 23CS054 <a href="https://github.com/Hitanshparikh/task_management_system">Github</a>.</strong>
+    <strong>Made By 23CS054 <a href="https://github.com/Hitanshparikh/task_management_system">Github</a>.</strong>
     CSE CSPIT
     <div class="float-right d-none d-sm-inline-block">
       <b><?php echo $_SESSION['system']['name'] ?></b>
