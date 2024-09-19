@@ -1,0 +1,157 @@
+<?php
+// Database connection
+$mysqli = new mysqli("localhost", "root", "", "tms_db");
+
+// Check connection
+if ($mysqli->connect_error) {
+    die("Connection failed: " . $mysqli->connect_error);
+}
+
+// Fetch user details
+$user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : 5; // Default to 5 if not provided
+
+// Initialize variable for filtering
+$time_frame = isset($_GET['time_frame']) ? $_GET['time_frame'] : '';
+
+// Create date condition based on user input
+$date_condition = '';
+
+if ($time_frame) {
+    switch ($time_frame) {
+        case 'current_week':
+            $date_condition = " AND YEARWEEK(t.date_created, 1) = YEARWEEK(CURDATE(), 1)";
+            break;
+        case 'last_week':
+            $date_condition = " AND YEARWEEK(t.date_created, 1) = YEARWEEK(CURDATE(), 1) - 1";
+            break;
+        case 'this_month':
+            $date_condition = " AND MONTH(t.date_created) = MONTH(CURDATE()) AND YEAR(t.date_created) = YEAR(CURDATE())";
+            break;
+        case 'last_month':
+            $date_condition = " AND MONTH(t.date_created) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND YEAR(t.date_created) = YEAR(CURDATE() - INTERVAL 1 MONTH)";
+            break;
+        case 'last_3_months':
+            $date_condition = " AND t.date_created >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)";
+            break;
+        case 'last_6_months':
+            $date_condition = " AND t.date_created >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)";
+            break;
+        case 'this_year':
+            $date_condition = " AND YEAR(t.date_created) = YEAR(CURDATE())";
+            break;
+        case 'last_year':
+            $date_condition = " AND YEAR(t.date_created) = YEAR(CURDATE() - INTERVAL 1 YEAR)";
+            break;
+    }
+}
+
+// SQL query to fetch tasks associated with the user
+$query = "
+    SELECT t.id, t.task, t.description, t.status, t.date_created, u.firstname, u.lastname, u.avatar
+    FROM task_list t
+    JOIN project_list p ON p.id = t.project_id
+    JOIN users u ON u.id = p.user_ids
+    WHERE u.id = '$user_id'" . $date_condition . "
+    ORDER BY t.task ASC
+";
+
+$result = $mysqli->query($query);
+
+if (!$result) {
+    die("Query failed: " . $mysqli->error);
+}
+
+// Fetch user details for displaying on the page
+$user_query = "SELECT firstname, lastname, avatar FROM users WHERE id = '$user_id'";
+$user_result = $mysqli->query($user_query);
+
+if ($user_result && $user_result->num_rows > 0) {
+    $user_data = $user_result->fetch_assoc();
+} else {
+    $user_data = [
+        'firstname' => 'Unknown',
+        'lastname' => 'User',
+        'avatar' => 'default-avatar.png' // Provide a default avatar image
+    ];
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Report</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-outline card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Employee Report</h3>
+                        <div class="card-tools">
+                            <button class="btn btn-flat btn-sm bg-gradient-success btn-success" id="print"><i class="fa fa-print"></i> Print</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="user-info">
+                            <h4><?php echo $user_data['firstname'] . ' ' . $user_data['lastname']; ?></h4>
+                            <img src="assets/uploads/<?php echo $user_data['avatar']; ?>" alt="User Avatar" class="img-thumbnail" style="width: 150px;">
+                        </div>
+                        <div class="table-responsive" id="printable">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Task</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Date Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $i = 1;
+                                while ($row = $result->fetch_assoc()) {
+                                    $status = $row['status'] == 0 ? 'Pending' : ($row['status'] == 1 ? 'Started' : ($row['status'] == 2 ? 'On-Progress' : ($row['status'] == 3 ? 'Completed' : 'On-Hold')));
+                                    ?>
+                                    <tr>
+                                        <td><?php echo $i++; ?></td>
+                                        <td><?php echo htmlspecialchars($row['task']); ?></td>
+                                        <td><?php echo htmlspecialchars($row['description']); ?></td>
+                                        <td><?php echo $status; ?></td>
+                                        <td><?php echo date('Y-m-d', strtotime($row['date_created'])); ?></td>
+                                    </tr>
+                                    <?php
+                                }
+                                ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('print').addEventListener('click', function() {
+            var printable = document.getElementById('printable').innerHTML;
+            var newWindow = window.open('', '', 'width=800,height=600');
+            newWindow.document.write('<html><head><title>Print Report</title>');
+            newWindow.document.write('<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">');
+            newWindow.document.write('</head><body>');
+            newWindow.document.write('<h3 class="text-center">Employee Report as of (<?php echo date('F d, Y'); ?>)</h3>');
+            newWindow.document.write(printable);
+            newWindow.document.write('</body></html>');
+            newWindow.document.close();
+            newWindow.focus();
+            newWindow.print();
+        });
+    </script>
+</body>
+</html>
+
